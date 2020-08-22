@@ -1,35 +1,32 @@
 const router = require("express").Router();
 const fs = require("fs");
-const markdown = require("markdown").markdown;
-const showdown   = require('showdown');
 
-let converter = new showdown.Converter();
+const helper = require('../helper/index');
 
-router.get("/", (req,res) => {
-	let stream = fs.createReadStream(__dirname + "/../markdown/index.md", {});
-	let data = '';
-	stream.on("data", chunk => {
-		data += chunk;
-	});
-	stream.on("end", () => {
-		let html = converter.makeHtml(data);
-		res.writeHead('200', {"Content-Type":"text/html"});
-		res.write(html);
-		res.end();
-	});
+
+router.get("/", async(req,res) => {
+	let content = await helper.getContents('base');
+	res.end(content);
 });
 
-router.get("/readme", (req,res) => {
-	let stream = fs.createReadStream(__dirname + "/../../README.md", {});
-	let data = '';
-	stream.on("data", chunk => {
-		data += chunk;
-	});
-	stream.on("end", () => {
-		let html = converter.makeHtml(data);
-		res.writeHead('200', {'Content-Type':'text/html'});
-		res.end(html);
-	});
+router.get("/installation", async(req,res) => {
+	let content = await helper.getContents('installation');
+	res.end(content);
+});
+
+router.get("/requirements", async(req,res) => {
+	let content = await helper.getContents('requirements');
+	res.end(content);
+});
+
+router.get("/readme", async(req,res) => {
+	let content = await helper.getContents('readme');
+	res.end(content);
+});
+
+router.get("/structure", async(req,res) => {
+	let content = await helper.getContents('structure');
+	res.end(content);
 });
 
 module.exports = router;
