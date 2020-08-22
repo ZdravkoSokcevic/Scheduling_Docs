@@ -9,13 +9,26 @@ router.get("/", (req,res) => {
 	let stream = fs.createReadStream(__dirname + "/../markdown/index.md", {});
 	let data = '';
 	stream.on("data", chunk => {
-		data+=chunk;
+		data += chunk;
 	});
 	stream.on("end", () => {
 		let html = converter.makeHtml(data);
 		res.writeHead('200', {"Content-Type":"text/html"});
 		res.write(html);
 		res.end();
+	});
+});
+
+router.get("/readme", (req,res) => {
+	let stream = fs.createReadStream(__dirname + "/../../README.md", {});
+	let data = '';
+	stream.on("data", chunk => {
+		data += chunk;
+	});
+	stream.on("end", () => {
+		let html = converter.makeHtml(data);
+		res.writeHead('200', {'Content-Type':'text/html'});
+		res.end(html);
 	});
 });
 
